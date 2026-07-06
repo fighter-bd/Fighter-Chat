@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIGHTER Call Center - 24/7 Support</title>
+    <style>
+        /* CSS Reset and Variables aligned with FIGHTER Brand */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        :root {
+            --fighter-dark: #0f172a;       /* ফাইটার থিমের মেইন ডিপ ব্লু/ব্ল্যাক */
+            --fighter-orange: #ff6b00;     /* ফাইটার সিগনেচার ব্রাইট অরেঞ্জ/গোল্ড */
+            --fighter-blue: #1e3a8a;       /* সাপোর্টিং ব্লু */
+            --fighter-light: #f8fafc;      /* লাইট ব্যাকগ্রাউন্ড */
+            --text-dark: #1e293b;
+        }
+
+        body {
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: #ffffff;
+            scroll-behavior: smooth;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* Navigation Bar - FIGHTER Style */
+        nav {
+            background: var(--fighter-dark);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--fighter-orange); /* ফাইটার বর্ডার লাইন */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        nav .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #fff;
+        }
+        nav .logo span {
+            color: var(--fighter-orange);
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav ul li {
+            margin-left: 25px;
+        }
+        nav ul li a {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: var(--fighter-orange);
+        }
+
+        /* Hero Section - Powerful FIGHTER Intro */
+        .hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(30, 58, 138, 0.85)), 
+                        url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200') no-repeat center center/cover;
+            height: 80vh;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero h1 {
+            font-size: 55px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .hero h1 span {
+            color: var(--fighter-orange);
+            text-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+        }
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 35px;
+            max-width: 700px;
+            color: #cbd5e1;
+        }
+        .cta-btn {
+            background: var(--fighter-orange);
+            color: #fff;
+            padding: 14px 40px;
+            border-radius: 4px; /* ফাইটার থিমের সাথে মিল রেখে শার্প/বক্স শেপ */
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
+        }
+        .cta-btn:hover {
+            background: #e05e00;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 0, 0.6);
+        }
+
+        /* Core Sections Layout */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 80px 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            margin-bottom: 50px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--fighter-dark);
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--fighter-orange);
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Services Grid - Fighter Style Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background: #fff;
+            padding: 45px 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(15, 23, 66, 0.06);
+            border-top: 4px solid var(--fighter-dark);
+            transition: 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-top-color: var(--fighter-orange);
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.15);
+        }
+        .service-card .icon {
+            font-size: 45px;
+            margin-bottom: 20px;
+            color: var(--fighter-orange);
+        }
+        .service-card h3 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--fighter-dark);
+        }
+
+        /* Contact Form Section */
+        .contact-section {
+            background: var(--fighter-light);
+        }
+        .contact-form {
+            max-width: 650px;
+            margin: auto;
+            background: #fff;
+            padding: 45px;
+            border-radius: 8px;
+            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            color: var(--fighter-dark);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--fighter-orange);
+            outline: none;
+        }
+        .submit-btn {
+            background: var(--fighter-dark);
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+            width: 100%;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .submit-btn:hover {
+            background: var(--fighter-orange);
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--fighter-dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 35px 20px;
+            font-size: 15px;
+            border-top: 2px solid #1e293b;
+        }
+
+        /* Responsive Breakpoint */
+        @media (max-width: 768px) {
+            nav { padding: 20px 5%; }
+            .hero h1 { font-size: 38px; }
+            .hero p { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">FIGHTER<span>.</span></div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <h1>FIGHTER <span>CALL CENTER</span></h1>
+        <p>আমরা ২৪/৭ আপনার ব্যবসার কাস্টমার সাপোর্ট পরিচালনা করতে প্রস্তুত। আপনার কাস্টমারদের দিন সেরা ও দ্রুততম সেবার অভিজ্ঞতা।</p>
+        <a href="#contact" class="cta-btn">Contact Us</a>
+    </header>
+
+    <!-- Services Section -->
+    <section class="container" id="services">
+        <h2 class="section-title">Our Premium Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="icon">📞</div>
+                <h3>Inbound Support</h3>
+                <p>কাস্টমারদের যেকোনো জিজ্ঞাসা, অর্ডার বা সমস্যার তাৎক্ষণিক ও পেশাদার সমাধান দিতে আমাদের এজেন্টরা সবসময় প্রস্তুত।</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">📈</div>
+                <h3>Outbound Sales</h3>
+                <p>টেলি-মার্কেটিং, কাস্টমার সার্ভে এবং লিড জেনারেশনের মাধ্যমে আপনার ব্যবসার বিক্রি কয়েক গুণ বাড়িয়ে নেওয়ার দায়িত্ব আমাদের।</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">⏰</div>
+                <h3>24/7 Help Desk</h3>
+                <p>দিন হোক বা রাত, সাপ্তাহিক ছুটির দিনসহ বছরের ৩৬৫ দিনই আপনার গ্লোবাল ও লোকাল কাস্টমারদের জন্য বিরতিহীন সাপোর্ট।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('ধন্যবাদ! আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।');">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="5" required placeholder="Describe your business needs..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 FIGHTER Call Center. All Rights Reserved. Powered by FIGHTER Team.</p>
+    </footer>
+
+    <!-- 💬 LIVE CHAT WIDGET (MESSENGER SYSTEM) 💬 -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/65f42c679131ed19d96ca0b2/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+</body>
+</html>
