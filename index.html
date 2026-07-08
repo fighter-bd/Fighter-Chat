@@ -2,222 +2,213 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fighter Chat</title>
-    <!-- Tailwind CSS CDN for modern utility styling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fighter WhatsApp v2.0</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Discord-like icons -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'wa-bg': '#0b141a', // WhatsApp dark bg
+                        'wa-panel': '#111b21', // WhatsApp side panel
+                        'wa-incoming': '#202c33', // Received message bg
+                        'wa-outgoing': '#005c4b', // Sent message bg
+                        'wa-header': '#202c33', // Header bg
+                        'wa-input': '#2a3942', // Input box bg
+                        'wa-accent': '#00a884' // WhatsApp Green
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-   <meta name="google-site-verification" content="erWE5KhzCGzL-dl4Mo9CVFrRUhlbxCDjP9BeKibsN8w" />
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="https://api.dicebear.com/7.x/bottts/svg?seed=fighter">
+    
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #313338; /* Discord dark background */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #111b21;
+            /* Mobile browser overflow stretch fix */
+            height: 100dvh; 
         }
-        /* Custom scrollbar matching Discord style */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 4px;
         }
         ::-webkit-scrollbar-track {
-            background: #2b2d31;
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1a1b1e;
-            border-radius: 4px;
+            background: #374248;
+            border-radius: 2px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #111214;
-        }
-        /* Smooth fade animations */
         .fade-in {
-            animation: fadeIn 0.3s ease-in-out forwards;
+            animation: fadeIn 0.2s ease-out forwards;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .wa-wallpaper {
+            background-color: #0b141a;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-blend-mode: overlay;
+            opacity: 0.35;
         }
     </style>
 </head>
-<body class="text-gray-200 h-screen overflow-hidden flex flex-col justify-center items-center">
+<body class="text-gray-200 overflow-hidden flex items-center justify-center bg-[#0b141a]">
 
     <!-- =========================================================================
-         1. AUTHENTICATION SCREEN (Login / Signup / Forgot Password)
+         1. AUTHENTICATION SCREEN (Mobile Responsive)
          ========================================================================= -->
-    <div id="auth-screen" class="w-full max-w-md p-8 bg-[#1e1f22] rounded-lg shadow-xl border border-gray-800 fade-in dynamic-view">
-        <!-- Brand / Header -->
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-[#5865f2] rounded-full text-white text-3xl mb-3 shadow-lg">
-                <i class="fa-solid fa-hand-fist animate-bounce"></i>
+    <div id="auth-screen" class="w-full max-w-md p-6 sm:p-8 bg-wa-panel rounded-lg shadow-2xl border border-gray-800/50 m-4 fade-in">
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-wa-accent rounded-full text-white text-2xl mb-3 shadow-lg">
+                <i class="fa-brands fa-whatsapp animate-pulse"></i>
             </div>
-            <h1 class="text-2xl font-bold text-white tracking-wide" id="auth-title">Welcome Back!</h1>
-            <p class="text-gray-400 text-sm mt-1" id="auth-subtitle">We're so excited to see you again!</p>
+            <h1 class="text-xl font-bold text-white tracking-wide" id="auth-title">Fighter WhatsApp</h1>
+            <p class="text-gray-400 text-xs mt-1" id="auth-subtitle">Sign in to start chatting instantly</p>
         </div>
 
-        <!-- Alert Notification Box -->
-        <div id="auth-alert" class="hidden mb-4 p-3 rounded text-sm font-medium transition-all duration-300"></div>
+        <div id="auth-alert" class="hidden mb-4 p-3 rounded text-xs font-medium transition-all duration-300"></div>
 
-        <!-- Dynamic Form -->
         <form id="auth-form" onsubmit="handleAuthSubmit(event)">
-            <!-- Username Input (Hidden during login/reset) -->
             <div id="username-group" class="hidden mb-4">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Username</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-user"></i></span>
-                    <input type="text" id="auth-username" class="w-full bg-[#111214] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-10 text-white focus:outline-none transition" placeholder="fighter_01">
-                </div>
+                <label class="block text-xs font-bold text-wa-accent uppercase tracking-wider mb-1.5">Username</label>
+                <input type="text" id="auth-username" class="w-full bg-wa-input border border-transparent focus:border-wa-accent rounded-lg p-2.5 text-sm text-white focus:outline-none transition" placeholder="Your Name">
             </div>
 
-            <!-- Email Input -->
             <div class="mb-4">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Email Address</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-envelope"></i></span>
-                    <input type="email" id="auth-email" required class="w-full bg-[#111214] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-10 text-white focus:outline-none transition" placeholder="name@domain.com">
-                </div>
+                <label class="block text-xs font-bold text-wa-accent uppercase tracking-wider mb-1.5">Email Address</label>
+                <input type="email" id="auth-email" required class="w-full bg-wa-input border border-transparent focus:border-wa-accent rounded-lg p-2.5 text-sm text-white focus:outline-none transition" placeholder="email@example.com">
             </div>
 
-            <!-- Password Input -->
             <div id="password-group" class="mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Password</label>
-                    <button type="button" onclick="switchAuthMode('forgot')" id="btn-forgot-link" class="text-xs text-[#00a8fc] hover:underline focus:outline-none">Forgot your password?</button>
+                <div class="flex justify-between items-center mb-1.5">
+                    <label class="text-xs font-bold text-wa-accent uppercase tracking-wider">Password</label>
+                    <button type="button" onclick="switchAuthMode('forgot')" id="btn-forgot-link" class="text-xs text-wa-accent hover:underline focus:outline-none">Forgot password?</button>
                 </div>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" id="auth-password" class="w-full bg-[#111214] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-10 text-white focus:outline-none transition" placeholder="••••••••">
-                </div>
+                <input type="password" id="auth-password" class="w-full bg-wa-input border border-transparent focus:border-wa-accent rounded-lg p-2.5 text-sm text-white focus:outline-none transition" placeholder="••••••••">
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit" id="auth-submit-btn" class="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium p-2.5 rounded transition shadow-md flex justify-center items-center gap-2">
+            <button type="submit" id="auth-submit-btn" class="w-full bg-wa-accent hover:bg-[#008f70] text-wa-panel font-bold p-2.5 rounded-lg transition shadow-md flex justify-center items-center gap-2 text-sm">
                 <span>Log In</span>
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
             </button>
         </form>
 
-        <!-- Footer Toggle Links -->
-        <div class="mt-6 text-sm text-gray-400 text-center" id="auth-footer">
-            Need an account? <button onclick="switchAuthMode('signup')" class="text-[#00a8fc] hover:underline focus:outline-none">Register</button>
+        <div class="mt-5 text-xs text-gray-400 text-center" id="auth-footer">
+            New to Fighter? <button onclick="switchAuthMode('signup')" class="text-wa-accent hover:underline focus:outline-none">Create Account</button>
         </div>
     </div>
 
 
     <!-- =========================================================================
-         2. MAIN CHAT APPLICATION INTERFACE (Discord Style Workspace)
+         2. MAIN CHAT APPLICATION INTERFACE (Perfect Mobile + Desktop Dual Mode)
          ========================================================================= -->
-    <div id="chat-screen" class="hidden w-full h-full flex overflow-hidden fade-in dynamic-view">
+    <div id="chat-screen" class="hidden w-full h-full lg:max-w-[1600px] lg:max-h-[95vh] lg:rounded-md shadow-2xl overflow-hidden flex border border-gray-800/20">
         
-        <!-- Leftmost Sidebar: Server Icons / Actions -->
-        <div class="w-16 bg-[#1e1f22] flex flex-col items-center py-3 gap-2 border-r border-[#111214]">
-            <div class="w-12 h-12 bg-[#5865f2] rounded-2xl flex items-center justify-center text-white text-xl font-bold cursor-pointer transition-all duration-200 hover:rounded-xl shadow" title="Fighter Chat Premium">
-                <i class="fa-solid fa-hand-fist"></i>
-            </div>
-            <div class="w-8 h-0.5 bg-gray-700 rounded my-1"></div>
-            <!-- Add Room Action -->
-            <button onclick="openCreateRoomModal()" class="w-12 h-12 bg-[#313338] text-[#23a55a] rounded-3xl flex items-center justify-center text-xl cursor-pointer transition-all duration-200 hover:rounded-xl hover:bg-[#23a55a] hover:text-white" title="Create a Room">
-                <i class="fa-solid fa-plus"></i>
-            </button>
-        </div>
-
-        <!-- Second Sidebar: Channel / Room List & Current User Profile -->
-        <div class="w-60 bg-[#2b2d31] flex flex-col justify-between border-r border-[#232428]">
-            <div>
-                <!-- Header Status -->
-                <div class="p-3 shadow-sm border-b border-[#1f2023] flex justify-between items-center bg-[#2b2d31]">
-                    <span class="font-bold text-white text-sm tracking-wide">FIGHTER ARENA</span>
-                    <i class="fa-solid fa-chevron-down text-gray-400 text-xs cursor-pointer"></i>
+        <!-- Left Sidebar: Chat History / Rooms List -->
+        <!-- "mobile-active" state handled through dynamic utility switches -->
+        <div id="sidebar-panel" class="w-full md:w-80 lg:w-96 bg-wa-panel flex flex-col border-r border-[#222e35] h-full flex-shrink-0">
+            <!-- Sidebar Profile Header -->
+            <div class="h-16 bg-wa-header px-4 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <img id="user-avatar" src="" alt="Me" class="w-9 h-9 rounded-full bg-gray-800 border border-gray-600">
+                    <span id="user-display-name" class="font-semibold text-sm text-white max-w-[120px] truncate">Fighter</span>
                 </div>
-                <!-- Rooms Section Container -->
-                <div class="p-2">
-                    <div class="flex justify-between items-center text-gray-400 font-bold text-xs uppercase px-2 py-1 tracking-wider">
-                        <span>Text Channels</span>
-                    </div>
-                    <div id="rooms-list" class="mt-1 space-y-0.5 max-h-[70vh] overflow-y-auto">
-                        <div class="text-xs text-gray-500 p-2 text-center">Loading arenas...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Current Logged In User Bottom Bar -->
-            <div class="bg-[#232428] p-2 flex items-center justify-between">
-                <div class="flex items-center gap-2 overflow-hidden">
-                    <div class="relative">
-                        <img id="user-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=fighter" alt="Avatar" class="w-8 h-8 rounded-full bg-gray-800">
-                        <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#23a55a] rounded-full border-2 border-[#232428]"></div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden">
-                        <span id="user-display-name" class="text-sm font-semibold text-white truncate leading-tight">Fighter</span>
-                        <span class="text-[10px] text-gray-400 truncate">Online</span>
-                    </div>
-                </div>
-                <!-- Settings/Logout Controls -->
-                <div class="flex items-center gap-1 text-gray-400">
-                    <button onclick="handleLogout()" class="p-1.5 hover:bg-gray-700 hover:text-red-400 rounded transition" title="Log Out">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                <div class="flex items-center gap-4 text-gray-400 text-base">
+                    <button onclick="openCreateRoomModal()" title="Create New Group/Room" class="hover:text-wa-accent transition">
+                        <i class="fa-solid fa-message"></i>
+                    </button>
+                    <button onclick="handleLogout()" title="Log Out" class="hover:text-red-400 transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
             </div>
+
+            <!-- Search/Filter Groups -->
+            <div class="p-2 bg-wa-bg border-b border-[#222e35] flex-shrink-0">
+                <div class="bg-wa-input rounded-lg flex items-center px-3 py-1.5 text-gray-400">
+                    <i class="fa-solid fa-search text-xs mr-3"></i>
+                    <input type="text" placeholder="Search or start a new chat" class="w-full bg-transparent text-xs focus:outline-none text-white placeholder-gray-500">
+                </div>
+            </div>
+
+            <!-- Rooms list -->
+            <div id="rooms-list" class="flex-1 overflow-y-auto divide-y divide-[#222e35]/60">
+                <div class="text-xs text-gray-500 p-4 text-center">Loading your chats...</div>
+            </div>
         </div>
 
-        <!-- Center Chat Feed Pane -->
-        <div class="flex-1 bg-[#313338] flex flex-col justify-between h-full relative">
-            <!-- Active Channel Header -->
-            <div class="h-12 border-b border-[#232428] shadow-sm flex items-center justify-between px-4 bg-[#313338]">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-hashtag text-gray-400 text-xl"></i>
-                    <span id="active-room-title" class="font-bold text-white">welcome-arena</span>
-                </div>
-                <div class="text-gray-400 flex items-center gap-4">
-                    <i class="fa-solid fa-bell cursor-pointer hover:text-gray-200" title="Notifications"></i>
-                    <i class="fa-solid fa-users cursor-pointer hover:text-gray-200" title="Member List"></i>
-                </div>
-            </div>
+        <!-- Right Main Panel: Active Chat Room -->
+        <div id="chat-panel" class="hidden md:flex flex-1 bg-wa-bg flex-col h-full relative">
+            <div class="absolute inset-0 wa-wallpaper pointer-events-none"></div>
 
-            <!-- Scrollable Chat Messages Feed Area -->
-            <div id="messages-feed" class="flex-1 overflow-y-auto p-4 space-y-4">
-                <div class="h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
-                    <i class="fa-solid fa-comments text-4xl text-gray-600"></i>
-                    <p>Select an arena channel from the sidebar to begin fighting!</p>
-                </div>
-            </div>
-
-            <!-- Message Action input wrapper layout bar -->
-            <div class="p-4 pt-0 bg-[#313338]">
-                <form id="message-form" onsubmit="handleSendMessage(event)" class="w-full">
-                    <div class="bg-[#383a40] rounded-lg flex items-center px-4 py-2.5 focus-within:ring-1 focus-within:ring-[#5865f2] transition">
-                        <button type="button" class="text-gray-400 hover:text-gray-200 mr-3"><i class="fa-solid fa-circle-plus text-lg"></i></button>
-                        <input type="text" id="message-input" required disabled class="w-full bg-transparent text-gray-200 placeholder-gray-500 focus:outline-none text-sm" placeholder="Message #welcome-arena">
-                        <button type="submit" class="text-gray-400 hover:text-[#5865f2] ml-3 transition"><i class="fa-solid fa-paper-plane text-lg"></i></button>
+            <!-- Inside Chat Header -->
+            <div class="h-16 bg-wa-header px-3 sm:px-4 flex items-center justify-between z-10 border-b border-[#222e35] flex-shrink-0">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <!-- Mobile Back Action Arrow -->
+                    <button onclick="backToSidebar()" class="md:hidden text-gray-400 hover:text-white mr-1 text-lg active:scale-95 transition focus:outline-none">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div class="w-9 h-9 bg-wa-accent/20 text-wa-accent rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold">
+                        <i class="fa-solid fa-users"></i>
                     </div>
+                    <div class="min-w-0">
+                        <h3 id="active-room-title" class="font-semibold text-white text-sm leading-tight truncate">Select a Chat</h3>
+                        <span class="text-[11px] text-gray-400 block truncate">Tap to open communication channel</span>
+                    </div>
+                </div>
+                <div class="text-gray-400 text-base flex items-center gap-4 flex-shrink-0 ml-2">
+                    <i class="fa-solid fa-search cursor-pointer hover:text-white hidden sm:block"></i>
+                    <i class="fa-solid fa-ellipsis-vertical cursor-pointer hover:text-white"></i>
+                </div>
+            </div>
+
+            <!-- Scrollable Message Bubble Area -->
+            <div id="messages-feed" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 z-10 relative flex flex-col">
+                <div class="m-auto text-center max-w-sm p-6 rounded-lg bg-wa-panel/90 backdrop-blur-sm shadow border border-gray-800 text-gray-400 text-sm">
+                    <i class="fa-brands fa-whatsapp text-5xl text-gray-600 mb-2 block"></i>
+                    <h4 class="text-white font-semibold mb-1">Fighter WhatsApp Web</h4>
+                    <p class="text-xs text-gray-400/80">Select a group room from the left sidebar panel to initialize real-time fighting chat stream.</p>
+                </div>
+            </div>
+
+            <!-- Bottom Message Input Field Footer Container -->
+            <div class="p-2 bg-wa-header flex items-center gap-2 z-10 flex-shrink-0">
+                <button type="button" class="text-gray-400 hover:text-white text-lg px-1"><i class="fa-regular fa-face-smile"></i></button>
+                
+                <form id="message-form" onsubmit="handleSendMessage(event)" class="flex-1 flex items-center gap-2 min-w-0">
+                    <input type="text" id="message-input" required disabled class="w-full bg-wa-input text-white placeholder-gray-500 rounded-lg px-3 sm:px-4 py-2 text-sm focus:outline-none min-w-0" placeholder="Type a message">
+                    <button type="submit" class="bg-wa-accent text-wa-panel hover:bg-[#008f70] rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 transition shadow-md"><i class="fa-solid fa-paper-plane text-sm"></i></button>
                 </form>
             </div>
         </div>
     </div>
 
     <!-- =========================================================================
-         3. DIALOG MODAL LAYERS (Create Channel Room Overlay)
+         3. DIALOG MODAL LAYERS (Create Group / Channel Overlay)
          ========================================================================= -->
-    <div id="create-room-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 transition-all duration-300">
-        <div class="bg-[#313338] border border-gray-800 rounded-lg max-w-md w-full overflow-hidden shadow-2xl scale-95 transition-transform duration-300">
+    <div id="create-room-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div class="bg-wa-panel border border-gray-800 rounded-lg max-w-md w-full overflow-hidden shadow-2xl">
             <div class="p-5">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-bold text-white">Create Text Channel</h3>
-                    <button onclick="closeCreateRoomModal()" class="text-gray-400 hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+                    <h3 class="text-base font-bold text-white">Create New Chat Group</h3>
+                    <button onclick="closeCreateRoomModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Channel Name</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-hashtag"></i></span>
-                        <input type="text" id="new-room-name" required class="w-full bg-[#1e1f22] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-8 text-white focus:outline-none transition" placeholder="new-arena">
-                    </div>
+                    <label class="block text-xs font-bold uppercase text-wa-accent mb-2">Group Name</label>
+                    <input type="text" id="new-room-name" required class="w-full bg-wa-input border border-transparent focus:border-wa-accent rounded-lg p-2.5 text-sm text-white focus:outline-none transition" placeholder="e.g. Friends Arena">
                 </div>
             </div>
-            <div class="bg-[#2b2d31] px-5 py-3 flex justify-end gap-3">
-                <button type="button" onclick="closeCreateRoomModal()" class="text-sm text-white hover:underline px-4 py-2">Cancel</button>
-                <button type="button" onclick="handleCreateRoomSubmit()" class="bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium text-sm px-5 py-2 rounded transition shadow-md">Create Channel</button>
+            <div class="bg-wa-header px-5 py-3 flex justify-end gap-2 text-xs">
+                <button type="button" onclick="closeCreateRoomModal()" class="text-white hover:underline px-3 py-2">Cancel</button>
+                <button type="button" onclick="handleCreateRoomSubmit()" class="bg-wa-accent text-wa-panel font-bold px-4 py-2 rounded-md transition shadow-md">Create</button>
             </div>
         </div>
     </div>
@@ -231,9 +222,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // -------------------------------------------------------------------------
-        // REAL FIREBASE CREDENTIALS APPLIED SUCCESFULLY
-        // -------------------------------------------------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyCvTIQzwht0L65C2tk0MF6u05ckadwoRV8",
             authDomain: "fighter-chatroom.firebaseapp.com",
@@ -244,25 +232,26 @@
             measurementId: "G-E2J6X81JBH"
         };
 
-        // Initialize App Ecosystem
+        // Initialize Ecosystem
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Application Global Memory State 
         let currentAuthMode = 'login'; 
         let activeRoomId = null;
         let unsubscribeMessages = null;
+        let initialLoadDone = false; // To prevent auto-opening first chat on mobile layout instantly
 
-        // Session Lifecycle Watcher (Auto Login Verification)
+        // Auth state listener
         auth.onAuthStateChanged((user) => {
             if (user) {
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('chat-screen').classList.remove('hidden');
-                
                 document.getElementById('user-display-name').innerText = user.displayName || user.email.split('@')[0];
                 document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
                 
+                // On login, reset to showing the sidebar first on mobile viewports
+                backToSidebar();
                 listenToChannelsList();
             } else {
                 if(unsubscribeMessages) { unsubscribeMessages(); unsubscribeMessages = null; }
@@ -272,53 +261,71 @@
             }
         });
 
-        // Presentation Layout Transitions
+        // Mobile Interface Switch View Functions
+        function backToSidebar() {
+            document.getElementById('chat-panel').classList.add('hidden');
+            document.getElementById('chat-panel').classList.remove('flex');
+            document.getElementById('sidebar-panel').classList.remove('hidden');
+        }
+
+        function openChatPanelOnMobile() {
+            if (window.innerWidth < 768) { // Target Tailwind 'md' threshold boundary breaking point
+                document.getElementById('sidebar-panel').classList.add('hidden');
+                document.getElementById('chat-panel').classList.remove('hidden');
+                document.getElementById('chat-panel').classList.add('flex');
+            }
+        }
+
+        // Handle viewport adjustments dynamically on resize events
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                document.getElementById('sidebar-panel').classList.remove('hidden');
+                document.getElementById('chat-panel').classList.remove('hidden');
+                document.getElementById('chat-panel').classList.add('flex');
+            } else if (activeRoomId === null) {
+                backToSidebar();
+            }
+        });
+
         function switchAuthMode(mode) {
             currentAuthMode = mode;
             const title = document.getElementById('auth-title');
-            const subtitle = document.getElementById('auth-subtitle');
             const uGroup = document.getElementById('username-group');
             const pGroup = document.getElementById('password-group');
             const submitBtn = document.getElementById('auth-submit-btn');
             const footer = document.getElementById('auth-footer');
             const forgotLink = document.getElementById('btn-forgot-link');
-            const alertBox = document.getElementById('auth-alert');
-            
-            alertBox.classList.add('hidden');
+            document.getElementById('auth-alert').classList.add('hidden');
 
             if (mode === 'login') {
-                title.innerText = "Welcome Back!";
-                subtitle.innerText = "We're so excited to see you again!";
+                title.innerText = "Fighter WhatsApp";
                 uGroup.classList.add('hidden');
                 pGroup.classList.remove('hidden');
                 forgotLink.classList.remove('hidden');
                 submitBtn.innerHTML = `<span>Log In</span><i class="fa-solid fa-arrow-right-to-bracket"></i>`;
-                footer.innerHTML = `Need an account? <button type="button" onclick="switchAuthMode('signup')" class="text-[#00a8fc] hover:underline focus:outline-none">Register</button>`;
+                footer.innerHTML = `New to Fighter? <button type="button" onclick="switchAuthMode('signup')" class="text-wa-accent hover:underline focus:outline-none">Create Account</button>`;
             } else if (mode === 'signup') {
-                title.innerText = "Create an account";
-                subtitle.innerText = "Join the ultimate arena today!";
+                title.innerText = "Create Account";
                 uGroup.classList.remove('hidden');
                 pGroup.classList.remove('hidden');
                 forgotLink.classList.add('hidden');
-                submitBtn.innerHTML = `<span>Continue</span><i class="fa-solid fa-user-plus"></i>`;
-                footer.innerHTML = `Already have an account? <button type="button" onclick="switchAuthMode('login')" class="text-[#00a8fc] hover:underline focus:outline-none">Log In</button>`;
+                submitBtn.innerHTML = `<span>Sign Up</span><i class="fa-solid fa-user-plus"></i>`;
+                footer.innerHTML = `Already have an account? <button type="button" onclick="switchAuthMode('login')" class="text-wa-accent hover:underline focus:outline-none">Log In</button>`;
             } else if (mode === 'forgot') {
                 title.innerText = "Reset Password";
-                subtitle.innerText = "Enter email to receive instructions.";
                 uGroup.classList.add('hidden');
                 pGroup.classList.add('hidden');
                 submitBtn.innerHTML = `<span>Send Reset Email</span><i class="fa-solid fa-paper-plane"></i>`;
-                footer.innerHTML = `Back to <button type="button" onclick="switchAuthMode('login')" class="text-[#00a8fc] hover:underline focus:outline-none">Log In</button>`;
+                footer.innerHTML = `Back to <button type="button" onclick="switchAuthMode('login')" class="text-wa-accent hover:underline focus:outline-none">Log In</button>`;
             }
         }
 
         function showAlert(msg, isSuccess = false) {
             const alertBox = document.getElementById('auth-alert');
             alertBox.innerText = msg;
-            alertBox.className = `p-3 mb-4 rounded text-sm font-medium fade-in ${isSuccess ? 'bg-[#23a55a]/20 text-[#23a55a]' : 'bg-[#f23f43]/20 text-[#f23f43]'}`;
+            alertBox.className = `p-3 mb-4 rounded text-xs font-medium fade-in ${isSuccess ? 'bg-wa-accent/20 text-wa-accent' : 'bg-red-500/20 text-red-400'}`;
         }
 
-        // Authentication Handler
         async function handleAuthSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
@@ -326,51 +333,38 @@
             const username = document.getElementById('auth-username').value.trim();
 
             if (currentAuthMode === 'signup') {
-                if(username.length < 3) return showAlert("Username must be at least 3 characters long.");
-                if(password.length < 6) return showAlert("Password must be at least 6 characters long.");
-
+                if(username.length < 3) return showAlert("Name must be at least 3 characters.");
                 try {
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    await userCredential.user.updateProfile({ displayName: username });
-                    
-                    await db.collection('users').doc(userCredential.user.uid).set({
-                        uid: userCredential.user.uid,
-                        username: username,
-                        email: email,
-                        avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${userCredential.user.uid}`,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    const res = await auth.createUserWithEmailAndPassword(email, password);
+                    await res.user.updateProfile({ displayName: username });
+                    await db.collection('users').doc(res.user.uid).set({
+                        uid: res.user.uid, username, email, createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                } catch(err) {
-                    showAlert(err.message);
-                }
+                } catch(err) { showAlert(err.message); }
             } else if (currentAuthMode === 'login') {
-                try {
-                    await auth.signInWithEmailAndPassword(email, password);
-                } catch(err) {
-                    showAlert(err.message);
-                }
+                try { await auth.signInWithEmailAndPassword(email, password); } catch(err) { showAlert(err.message); }
             } else if (currentAuthMode === 'forgot') {
                 try {
                     await auth.sendPasswordResetEmail(email);
-                    showAlert("Reset link transmitted! Check your mailbox.", true);
-                } catch(err) {
-                    showAlert(err.message);
-                }
+                    showAlert("Reset link sent! Check your inbox.", true);
+                } catch(err) { showAlert(err.message); }
             }
         }
 
-        function handleLogout() {
-            auth.signOut();
+        function handleLogout() { 
+            initialLoadDone = false;
+            activeRoomId = null;
+            auth.signOut(); 
         }
 
-        // Channels Syncing Logic
+        // WhatsApp Sidebar Rooms Rendering
         function listenToChannelsList() {
-            db.collection('rooms').orderBy('createdAt', 'asc').onSnapshot((snapshot) => {
+            db.collection('rooms').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
                 const listContainer = document.getElementById('rooms-list');
                 listContainer.innerHTML = '';
                 
                 if(snapshot.empty) {
-                    listContainer.innerHTML = `<div class="text-xs text-gray-500 p-2 text-center">No arenas built yet.</div>`;
+                    listContainer.innerHTML = `<div class="text-xs text-gray-500 p-4 text-center">No groups available. Click the icon above to create one.</div>`;
                     return;
                 }
 
@@ -378,105 +372,106 @@
                     const data = doc.data();
                     const isSelected = doc.id === activeRoomId;
                     const item = document.createElement('div');
-                    item.className = `flex items-center justify-between px-2 py-1.5 rounded text-sm cursor-pointer transition group ${isSelected ? 'bg-[#404249] text-white' : 'text-gray-400 hover:bg-[#35373c] hover:text-gray-200'}`;
-                    item.setAttribute('onclick', `switchActiveChannel('${doc.id}', '${data.name}')`);
+                    item.className = `flex items-center gap-3 px-4 py-3 cursor-pointer transition ${isSelected ? 'bg-[#2a3942]' : 'hover:bg-[#202c33]'}`;
+                    item.setAttribute('onclick', `switchActiveChannel('${doc.id}', '${data.name}', true)`);
+                    
                     item.innerHTML = `
-                        <div class="flex items-center gap-1.5 truncate">
-                            <i class="fa-solid fa-hashtag text-gray-500"></i>
-                            <span class="truncate font-medium">${data.name}</span>
+                        <div class="w-10 h-10 bg-wa-accent/10 text-wa-accent rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm border border-[#222e35]">
+                            ${data.name.substring(0,2).toUpperCase()}
+                        </div>
+                        <div class="flex-1 min-w-0 pb-1">
+                            <div class="flex justify-between items-baseline">
+                                <h4 class="text-sm font-semibold text-white truncate">${data.name}</h4>
+                                <span class="text-[9px] text-gray-400">Group</span>
+                            </div>
+                            <p class="text-xs text-gray-400 truncate mt-0.5">Tap to join room arena discussion...</p>
                         </div>
                     `;
                     listContainer.appendChild(item);
                 });
 
-                if(!activeRoomId && snapshot.docs.length > 0) {
-                    const firstDoc = snapshot.docs[0];
-                    switchActiveChannel(firstDoc.id, firstDoc.data().name);
+                // Auto-load first channel ONLY if desktop viewport profile configuration layout pattern detected
+                if(!activeRoomId && snapshot.docs.length > 0 && window.innerWidth >= 768 && !initialLoadDone) {
+                    const first = snapshot.docs[0];
+                    switchActiveChannel(first.id, first.data().name, false);
+                    initialLoadDone = true;
                 }
-            }, err => console.error("Room sync failure: ", err));
+            });
         }
 
-        function openCreateRoomModal() {
-            document.getElementById('create-room-modal').classList.remove('hidden');
-        }
-        function closeCreateRoomModal() {
+        function openCreateRoomModal() { document.getElementById('create-room-modal').classList.remove('hidden'); }
+        function closeCreateRoomModal() { 
             document.getElementById('create-room-modal').classList.add('hidden');
             document.getElementById('new-room-name').value = '';
         }
 
         async function handleCreateRoomSubmit() {
-            const nameInput = document.getElementById('new-room-name').value.trim().toLowerCase().replace(/\s+/g, '-');
-            if(!nameInput) return;
-
+            const name = document.getElementById('new-room-name').value.trim();
+            if(!name) return;
             try {
-                const newDocRef = await db.collection('rooms').add({
-                    name: nameInput,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    createdBy: auth.currentUser.uid
+                const docRef = await db.collection('rooms').add({
+                    name, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdBy: auth.currentUser.uid
                 });
                 closeCreateRoomModal();
-                switchActiveChannel(newDocRef.id, nameInput);
-            } catch(err) {
-                console.error("Room addition matrix execution error: ", err);
-            }
+                switchActiveChannel(docRef.id, name, true);
+            } catch(err) { console.error(err); }
         }
 
-        // Messaging Control Logic
-        function switchActiveChannel(roomId, roomName) {
+        function switchActiveChannel(roomId, roomName, userClicked = false) {
             activeRoomId = roomId;
             document.getElementById('active-room-title').innerText = roomName;
             
             const msgInput = document.getElementById('message-input');
             msgInput.disabled = false;
-            msgInput.placeholder = `Message #${roomName}`;
+            msgInput.placeholder = "Type a message";
+
+            if (userClicked) {
+                openChatPanelOnMobile();
+            }
 
             if (unsubscribeMessages) unsubscribeMessages();
             listenToMessagesFeed(roomId);
         }
 
+        // WhatsApp Chat Bubble Styling Render Pipeline
         function listenToMessagesFeed(roomId) {
             const feed = document.getElementById('messages-feed');
-            feed.innerHTML = `<div class="h-full flex items-center justify-center text-gray-500 text-sm"><i class="fa-solid fa-circle-notch animate-spin mr-2"></i> Syncing channel stream...</div>`;
+            feed.innerHTML = `<div class="m-auto text-sm text-gray-400"><i class="fa-solid fa-circle-notch animate-spin mr-2"></i> Loading messages...</div>`;
 
             unsubscribeMessages = db.collection('rooms').doc(roomId).collection('messages')
                 .orderBy('timestamp', 'asc')
                 .onSnapshot((snapshot) => {
                     feed.innerHTML = '';
                     if (snapshot.empty) {
-                        feed.innerHTML = `
-                            <div class="h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
-                                <i class="fa-solid fa-paper-plane text-3xl text-gray-600"></i>
-                                <p>Welcome to the beginning of the #${document.getElementById('active-room-title').innerText} channel!</p>
-                            </div>`;
+                        feed.innerHTML = `<div class="m-auto text-xs text-gray-400 bg-wa-panel px-3 py-1.5 rounded-md shadow border border-gray-800">🔒 Messages are saved on Firestore database securely.</div>`;
                         return;
                     }
 
                     snapshot.forEach((doc) => {
                         const msg = doc.data();
-                        const card = document.createElement('div');
-                        card.className = "flex items-start gap-4 hover:bg-[#2e3035]/30 p-1 px-2 rounded group transition duration-150 fade-in";
+                        const isMe = msg.userId === auth.currentUser.uid;
                         
-                        let timeString = "Just Now";
+                        const bubbleWrapper = document.createElement('div');
+                        bubbleWrapper.className = `flex w-full mb-1 fade-in ${isMe ? 'justify-end' : 'justify-start'}`;
+
+                        let timeString = "12:00";
                         if(msg.timestamp) {
-                            const date = msg.timestamp.toDate();
-                            timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            timeString = msg.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                         }
 
-                        card.innerHTML = `
-                            <img src="${msg.userAvatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=fallback'}" class="w-10 h-10 rounded-full bg-[#1e1f22] mt-0.5" alt="User Avatar">
-                            <div class="flex flex-col">
-                                <div class="flex items-baseline gap-2">
-                                    <span class="font-semibold text-white text-sm hover:underline cursor-pointer">${msg.userName}</span>
-                                    <span class="text-[10px] text-gray-400 font-medium">${timeString}</span>
-                                </div>
-                                <p class="text-sm text-gray-300 mt-0.5 break-all select-text">${escapeHTML(msg.content)}</p>
+                        bubbleWrapper.innerHTML = `
+                            <div class="max-w-[85%] sm:max-w-[70%] rounded-lg px-3 py-1.5 shadow-md relative min-w-[80px] ${isMe ? 'bg-wa-outgoing text-white rounded-tr-none' : 'bg-wa-incoming text-gray-100 rounded-tl-none'}">
+                                ${!isMe ? `<span class="block text-[11px] font-bold text-wa-accent mb-0.5">${msg.userName}</span>` : ''}
+                                <p class="text-sm pb-2 break-all pr-8 select-text">${escapeHTML(msg.content)}</p>
+                                <span class="absolute bottom-1 right-2 text-[9px] text-gray-400 font-medium select-none flex items-center gap-1">
+                                    ${timeString}
+                                    ${isMe ? '<i class="fa-solid fa-check-double text-blue-400"></i>' : ''}
+                                </span>
                             </div>
                         `;
-                        feed.appendChild(card);
+                        feed.appendChild(bubbleWrapper);
                     });
                     feed.scrollTop = feed.scrollHeight;
-                }, err => {
-                    console.error("Message stream failure: ", err);
                 });
         }
 
@@ -484,27 +479,21 @@
             e.preventDefault();
             const inputField = document.getElementById('message-input');
             const content = inputField.value.trim();
-            
             if(!content || !activeRoomId) return;
             inputField.value = '';
 
             try {
                 await db.collection('rooms').doc(activeRoomId).collection('messages').add({
-                    content: content,
+                    content,
                     userId: auth.currentUser.uid,
                     userName: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
-                    userAvatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${auth.currentUser.uid}`,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
-            } catch(err) {
-                console.error("Message send failure: ", err);
-            }
+            } catch(err) { console.error(err); }
         }
 
         function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
+            return str.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t));
         }
     </script>
 </body>
