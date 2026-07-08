@@ -3,331 +3,509 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIGHTER Call Center - 24/7 Support</title>
+    <title>Fighter Chat v2.0</title>
+    <!-- Tailwind CSS CDN for modern utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Discord-like icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* CSS Reset and Variables aligned with FIGHTER Brand */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        :root {
-            --fighter-dark: #0f172a;       /* ফাইটার থিমের মেইন ডিপ ব্লু/ব্ল্যাক */
-            --fighter-orange: #ff6b00;     /* ফাইটার সিগনেচার ব্রাইট অরেঞ্জ/গোল্ড */
-            --fighter-blue: #1e3a8a;       /* সাপোর্টিং ব্লু */
-            --fighter-light: #f8fafc;      /* লাইট ব্যাকগ্রাউন্ড */
-            --text-dark: #1e293b;
-        }
-
         body {
-            color: var(--text-dark);
-            line-height: 1.6;
-            background-color: #ffffff;
-            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+            background-color: #313338; /* Discord dark background */
         }
-        a { text-decoration: none; color: inherit; }
-
-        /* Navigation Bar - FIGHTER Style */
-        nav {
-            background: var(--fighter-dark);
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 8%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 3px solid var(--fighter-orange); /* ফাইটার বর্ডার লাইন */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* Custom scrollbar matching Discord style */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-        nav .logo {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            color: #fff;
+        ::-webkit-scrollbar-track {
+            background: #2b2d31;
         }
-        nav .logo span {
-            color: var(--fighter-orange);
-        }
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        nav ul li {
-            margin-left: 25px;
-        }
-        nav ul li a {
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            transition: 0.3s;
-        }
-        nav ul li a:hover {
-            color: var(--fighter-orange);
-        }
-
-        /* Hero Section - Powerful FIGHTER Intro */
-        .hero {
-            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(30, 58, 138, 0.85)), 
-                        url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200') no-repeat center center/cover;
-            height: 80vh;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-        }
-        .hero h1 {
-            font-size: 55px;
-            font-weight: 900;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .hero h1 span {
-            color: var(--fighter-orange);
-            text-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
-        }
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 35px;
-            max-width: 700px;
-            color: #cbd5e1;
-        }
-        .cta-btn {
-            background: var(--fighter-orange);
-            color: #fff;
-            padding: 14px 40px;
-            border-radius: 4px; /* ফাইটার থিমের সাথে মিল রেখে শার্প/বক্স শেপ */
-            font-weight: bold;
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
-        }
-        .cta-btn:hover {
-            background: #e05e00;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 107, 0, 0.6);
-        }
-
-        /* Core Sections Layout */
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 80px 20px;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 38px;
-            margin-bottom: 50px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--fighter-dark);
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--fighter-orange);
-            margin: 12px auto 0;
-            border-radius: 2px;
-        }
-
-        /* Services Grid - Fighter Style Cards */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .service-card {
-            background: #fff;
-            padding: 45px 30px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 5px 25px rgba(15, 23, 66, 0.06);
-            border-top: 4px solid var(--fighter-dark);
-            transition: 0.3s;
-        }
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-top-color: var(--fighter-orange);
-            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.15);
-        }
-        .service-card .icon {
-            font-size: 45px;
-            margin-bottom: 20px;
-            color: var(--fighter-orange);
-        }
-        .service-card h3 {
-            margin-bottom: 15px;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--fighter-dark);
-        }
-
-        /* Contact Form Section */
-        .contact-section {
-            background: var(--fighter-light);
-        }
-        .contact-form {
-            max-width: 650px;
-            margin: auto;
-            background: #fff;
-            padding: 45px;
-            border-radius: 8px;
-            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
-            border: 1px solid #e2e8f0;
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            color: var(--fighter-dark);
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 14px 15px;
-            border: 2px solid #e2e8f0;
+        ::-webkit-scrollbar-thumb {
+            background: #1a1b1e;
             border-radius: 4px;
-            font-size: 16px;
-            transition: 0.3s;
         }
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--fighter-orange);
-            outline: none;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #111214;
         }
-        .submit-btn {
-            background: var(--fighter-dark);
-            color: #fff;
-            border: none;
-            padding: 15px 20px;
-            width: 100%;
-            border-radius: 4px;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: 0.3s;
+        /* Smooth fade animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
         }
-        .submit-btn:hover {
-            background: var(--fighter-orange);
-            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--fighter-dark);
-            color: #94a3b8;
-            text-align: center;
-            padding: 35px 20px;
-            font-size: 15px;
-            border-top: 2px solid #1e293b;
-        }
-
-        /* Responsive Breakpoint */
-        @media (max-width: 768px) {
-            nav { padding: 20px 5%; }
-            .hero h1 { font-size: 38px; }
-            .hero p { font-size: 16px; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body>
+<body class="text-gray-200 h-screen overflow-hidden flex flex-col justify-center items-center">
 
-    <!-- Navigation -->
-    <nav>
-        <div class="logo">FIGHTER<span>.</span></div>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="hero" id="home">
-        <h1>FIGHTER <span>CALL CENTER</span></h1>
-        <p>আমরা ২৪/৭ আপনার ব্যবসার কাস্টমার সাপোর্ট পরিচালনা করতে প্রস্তুত। আপনার কাস্টমারদের দিন সেরা ও দ্রুততম সেবার অভিজ্ঞতা।</p>
-        <a href="#contact" class="cta-btn">Contact Us</a>
-    </header>
-
-    <!-- Services Section -->
-    <section class="container" id="services">
-        <h2 class="section-title">Our Premium Services</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="icon">📞</div>
-                <h3>Inbound Support</h3>
-                <p>কাস্টমারদের যেকোনো জিজ্ঞাসা, অর্ডার বা সমস্যার তাৎক্ষণিক ও পেশাদার সমাধান দিতে আমাদের এজেন্টরা সবসময় প্রস্তুত।</p>
+    <!-- =========================================================================
+         1. AUTHENTICATION SCREEN (Login / Signup / Forgot Password)
+         ========================================================================= -->
+    <div id="auth-screen" class="w-full max-w-md p-8 bg-[#1e1f22] rounded-lg shadow-xl border border-gray-800 fade-in dynamic-view">
+        <!-- Brand / Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-[#5865f2] rounded-full text-white text-3xl mb-3 shadow-lg">
+                <i class="fa-solid fa-hand-fist animate-bounce"></i>
             </div>
-            <div class="service-card">
-                <div class="icon">📈</div>
-                <h3>Outbound Sales</h3>
-                <p>টেলি-মার্কেটিং, কাস্টমার সার্ভে এবং লিড জেনারেশনের মাধ্যমে আপনার ব্যবসার বিক্রি কয়েক গুণ বাড়িয়ে নেওয়ার দায়িত্ব আমাদের।</p>
+            <h1 class="text-2xl font-bold text-white tracking-wide" id="auth-title">Welcome Back!</h1>
+            <p class="text-gray-400 text-sm mt-1" id="auth-subtitle">We're so excited to see you again!</p>
+        </div>
+
+        <!-- Alert Notification Box -->
+        <div id="auth-alert" class="hidden mb-4 p-3 rounded text-sm font-medium transition-all duration-300"></div>
+
+        <!-- Dynamic Form -->
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+            <!-- Username Input (Hidden during login/reset) -->
+            <div id="username-group" class="hidden mb-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Username</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-user"></i></span>
+                    <input type="text" id="auth-username" class="w-full bg-[#111214] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-10 text-white focus:outline-none transition" placeholder="fighter_01">
+                </div>
             </div>
-            <div class="service-card">
-                <div class="icon">⏰</div>
-                <h3>24/7 Help Desk</h3>
-                <p>দিন হোক বা রাত, সাপ্তাহিক ছুটির দিনসহ বছরের ৩৬৫ দিনই আপনার গ্লোবাল ও লোকাল কাস্টমারদের জন্য বিরতিহীন সাপোর্ট।</p>
+
+            <!-- Email Input -->
+            <div class="mb-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Email Address</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-envelope"></i></span>
+                    <input type="email" id="auth-email" required class="w-full bg-[#111214] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-10 text-white focus:outline-none transition" placeholder="name@domain.com">
+                </div>
+            </div>
+
+            <!-- Password Input -->
+            <div id="password-group" class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Password</label>
+                    <button type="button" onclick="switchAuthMode('forgot')" id="btn-forgot-link" class="text-xs text-[#00a8fc] hover:underline focus:outline-none">Forgot your password?</button>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="auth-password" class="w-full bg-[#111214] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-10 text-white focus:outline-none transition" placeholder="••••••••">
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="auth-submit-btn" class="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium p-2.5 rounded transition shadow-md flex justify-center items-center gap-2">
+                <span>Log In</span>
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </form>
+
+        <!-- Footer Toggle Links -->
+        <div class="mt-6 text-sm text-gray-400 text-center" id="auth-footer">
+            Need an account? <button onclick="switchAuthMode('signup')" class="text-[#00a8fc] hover:underline focus:outline-none">Register</button>
+        </div>
+    </div>
+
+
+    <!-- =========================================================================
+         2. MAIN CHAT APPLICATION INTERFACE (Discord Style Workspace)
+         ========================================================================= -->
+    <div id="chat-screen" class="hidden w-full h-full flex overflow-hidden fade-in dynamic-view">
+        
+        <!-- Leftmost Sidebar: Server Icons / Actions -->
+        <div class="w-16 bg-[#1e1f22] flex flex-col items-center py-3 gap-2 border-r border-[#111214]">
+            <div class="w-12 h-12 bg-[#5865f2] rounded-2xl flex items-center justify-center text-white text-xl font-bold cursor-pointer transition-all duration-200 hover:rounded-xl shadow" title="Fighter Chat Premium">
+                <i class="fa-solid fa-hand-fist"></i>
+            </div>
+            <div class="w-8 h-0.5 bg-gray-700 rounded my-1"></div>
+            <!-- Add Room Action -->
+            <button onclick="openCreateRoomModal()" class="w-12 h-12 bg-[#313338] text-[#23a55a] rounded-3xl flex items-center justify-center text-xl cursor-pointer transition-all duration-200 hover:rounded-xl hover:bg-[#23a55a] hover:text-white" title="Create a Room">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Second Sidebar: Channel / Room List & Current User Profile -->
+        <div class="w-60 bg-[#2b2d31] flex flex-col justify-between border-r border-[#232428]">
+            <div>
+                <!-- Header Status -->
+                <div class="p-3 shadow-sm border-b border-[#1f2023] flex justify-between items-center bg-[#2b2d31]">
+                    <span class="font-bold text-white text-sm tracking-wide">FIGHTER ARENA</span>
+                    <i class="fa-solid fa-chevron-down text-gray-400 text-xs cursor-pointer"></i>
+                </div>
+                <!-- Rooms Section Container -->
+                <div class="p-2">
+                    <div class="flex justify-between items-center text-gray-400 font-bold text-xs uppercase px-2 py-1 tracking-wider">
+                        <span>Text Channels</span>
+                    </div>
+                    <div id="rooms-list" class="mt-1 space-y-0.5 max-h-[70vh] overflow-y-auto">
+                        <div class="text-xs text-gray-500 p-2 text-center">Loading arenas...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Logged In User Bottom Bar -->
+            <div class="bg-[#232428] p-2 flex items-center justify-between">
+                <div class="flex items-center gap-2 overflow-hidden">
+                    <div class="relative">
+                        <img id="user-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=fighter" alt="Avatar" class="w-8 h-8 rounded-full bg-gray-800">
+                        <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#23a55a] rounded-full border-2 border-[#232428]"></div>
+                    </div>
+                    <div class="flex flex-col overflow-hidden">
+                        <span id="user-display-name" class="text-sm font-semibold text-white truncate leading-tight">Fighter</span>
+                        <span class="text-[10px] text-gray-400 truncate">Online</span>
+                    </div>
+                </div>
+                <!-- Settings/Logout Controls -->
+                <div class="flex items-center gap-1 text-gray-400">
+                    <button onclick="handleLogout()" class="p-1.5 hover:bg-gray-700 hover:text-red-400 rounded transition" title="Log Out">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <h2 class="section-title">Let's Connect</h2>
-            <form class="contact-form" onsubmit="event.preventDefault(); alert('ধন্যবাদ! আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।');">
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" required placeholder="Enter your full name">
+        <!-- Center Chat Feed Pane -->
+        <div class="flex-1 bg-[#313338] flex flex-col justify-between h-full relative">
+            <!-- Active Channel Header -->
+            <div class="h-12 border-b border-[#232428] shadow-sm flex items-center justify-between px-4 bg-[#313338]">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-hashtag text-gray-400 text-xl"></i>
+                    <span id="active-room-title" class="font-bold text-white">welcome-arena</span>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" required placeholder="Enter your email">
+                <div class="text-gray-400 flex items-center gap-4">
+                    <i class="fa-solid fa-bell cursor-pointer hover:text-gray-200" title="Notifications"></i>
+                    <i class="fa-solid fa-users cursor-pointer hover:text-gray-200" title="Member List"></i>
                 </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="5" required placeholder="Describe your business needs..."></textarea>
+            </div>
+
+            <!-- Scrollable Chat Messages Feed Area -->
+            <div id="messages-feed" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div class="h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
+                    <i class="fa-solid fa-comments text-4xl text-gray-600"></i>
+                    <p>Select an arena channel from the sidebar to begin fighting!</p>
                 </div>
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
+            </div>
+
+            <!-- Message Action input wrapper layout bar -->
+            <div class="p-4 pt-0 bg-[#313338]">
+                <form id="message-form" onsubmit="handleSendMessage(event)" class="w-full">
+                    <div class="bg-[#383a40] rounded-lg flex items-center px-4 py-2.5 focus-within:ring-1 focus-within:ring-[#5865f2] transition">
+                        <button type="button" class="text-gray-400 hover:text-gray-200 mr-3"><i class="fa-solid fa-circle-plus text-lg"></i></button>
+                        <input type="text" id="message-input" required disabled class="w-full bg-transparent text-gray-200 placeholder-gray-500 focus:outline-none text-sm" placeholder="Message #welcome-arena">
+                        <button type="submit" class="text-gray-400 hover:text-[#5865f2] ml-3 transition"><i class="fa-solid fa-paper-plane text-lg"></i></button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 FIGHTER Call Center. All Rights Reserved. Powered by FIGHTER Team.</p>
-    </footer>
+    <!-- =========================================================================
+         3. DIALOG MODAL LAYERS (Create Channel Room Overlay)
+         ========================================================================= -->
+    <div id="create-room-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 transition-all duration-300">
+        <div class="bg-[#313338] border border-gray-800 rounded-lg max-w-md w-full overflow-hidden shadow-2xl scale-95 transition-transform duration-300">
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-white">Create Text Channel</h3>
+                    <button onclick="closeCreateRoomModal()" class="text-gray-400 hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Channel Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"><i class="fa-solid fa-hashtag"></i></span>
+                        <input type="text" id="new-room-name" required class="w-full bg-[#1e1f22] border border-transparent focus:border-[#5865f2] rounded p-2.5 pl-8 text-white focus:outline-none transition" placeholder="new-arena">
+                    </div>
+                </div>
+            </div>
+            <div class="bg-[#2b2d31] px-5 py-3 flex justify-end gap-3">
+                <button type="button" onclick="closeCreateRoomModal()" class="text-sm text-white hover:underline px-4 py-2">Cancel</button>
+                <button type="button" onclick="handleCreateRoomSubmit()" class="bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium text-sm px-5 py-2 rounded transition shadow-md">Create Channel</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- 💬 LIVE CHAT WIDGET (MESSENGER SYSTEM) 💬 -->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/65f42c679131ed19d96ca0b2/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
+
+    <!-- =========================================================================
+         4. FIREBASE SDK IMPORTS & CORE SYSTEM JAVASCRIPT
+         ========================================================================= -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // -------------------------------------------------------------------------
+        // REAL FIREBASE CREDENTIALS APPLIED SUCCESFULLY
+        // -------------------------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvTIQzwht0L65C2tk0MF6u05ckadwoRV8",
+            authDomain: "fighter-chatroom.firebaseapp.com",
+            projectId: "fighter-chatroom",
+            storageBucket: "fighter-chatroom.firebasestorage.app",
+            messagingSenderId: "1022521157335",
+            appId: "1:1022521157335:web:7997fafa3061dfcb053292",
+            measurementId: "G-E2J6X81JBH"
+        };
+
+        // Initialize App Ecosystem
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Application Global Memory State 
+        let currentAuthMode = 'login'; 
+        let activeRoomId = null;
+        let unsubscribeMessages = null;
+
+        // Session Lifecycle Watcher (Auto Login Verification)
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('chat-screen').classList.remove('hidden');
+                
+                document.getElementById('user-display-name').innerText = user.displayName || user.email.split('@')[0];
+                document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+                
+                listenToChannelsList();
+            } else {
+                if(unsubscribeMessages) { unsubscribeMessages(); unsubscribeMessages = null; }
+                document.getElementById('chat-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+                switchAuthMode('login');
+            }
+        });
+
+        // Presentation Layout Transitions
+        function switchAuthMode(mode) {
+            currentAuthMode = mode;
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const uGroup = document.getElementById('username-group');
+            const pGroup = document.getElementById('password-group');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const footer = document.getElementById('auth-footer');
+            const forgotLink = document.getElementById('btn-forgot-link');
+            const alertBox = document.getElementById('auth-alert');
+            
+            alertBox.classList.add('hidden');
+
+            if (mode === 'login') {
+                title.innerText = "Welcome Back!";
+                subtitle.innerText = "We're so excited to see you again!";
+                uGroup.classList.add('hidden');
+                pGroup.classList.remove('hidden');
+                forgotLink.classList.remove('hidden');
+                submitBtn.innerHTML = `<span>Log In</span><i class="fa-solid fa-arrow-right-to-bracket"></i>`;
+                footer.innerHTML = `Need an account? <button type="button" onclick="switchAuthMode('signup')" class="text-[#00a8fc] hover:underline focus:outline-none">Register</button>`;
+            } else if (mode === 'signup') {
+                title.innerText = "Create an account";
+                subtitle.innerText = "Join the ultimate arena today!";
+                uGroup.classList.remove('hidden');
+                pGroup.classList.remove('hidden');
+                forgotLink.classList.add('hidden');
+                submitBtn.innerHTML = `<span>Continue</span><i class="fa-solid fa-user-plus"></i>`;
+                footer.innerHTML = `Already have an account? <button type="button" onclick="switchAuthMode('login')" class="text-[#00a8fc] hover:underline focus:outline-none">Log In</button>`;
+            } else if (mode === 'forgot') {
+                title.innerText = "Reset Password";
+                subtitle.innerText = "Enter email to receive instructions.";
+                uGroup.classList.add('hidden');
+                pGroup.classList.add('hidden');
+                submitBtn.innerHTML = `<span>Send Reset Email</span><i class="fa-solid fa-paper-plane"></i>`;
+                footer.innerHTML = `Back to <button type="button" onclick="switchAuthMode('login')" class="text-[#00a8fc] hover:underline focus:outline-none">Log In</button>`;
+            }
+        }
+
+        function showAlert(msg, isSuccess = false) {
+            const alertBox = document.getElementById('auth-alert');
+            alertBox.innerText = msg;
+            alertBox.className = `p-3 mb-4 rounded text-sm font-medium fade-in ${isSuccess ? 'bg-[#23a55a]/20 text-[#23a55a]' : 'bg-[#f23f43]/20 text-[#f23f43]'}`;
+        }
+
+        // Authentication Handler
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const username = document.getElementById('auth-username').value.trim();
+
+            if (currentAuthMode === 'signup') {
+                if(username.length < 3) return showAlert("Username must be at least 3 characters long.");
+                if(password.length < 6) return showAlert("Password must be at least 6 characters long.");
+
+                try {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    await userCredential.user.updateProfile({ displayName: username });
+                    
+                    await db.collection('users').doc(userCredential.user.uid).set({
+                        uid: userCredential.user.uid,
+                        username: username,
+                        email: email,
+                        avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${userCredential.user.uid}`,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch(err) {
+                    showAlert(err.message);
+                }
+            } else if (currentAuthMode === 'login') {
+                try {
+                    await auth.signInWithEmailAndPassword(email, password);
+                } catch(err) {
+                    showAlert(err.message);
+                }
+            } else if (currentAuthMode === 'forgot') {
+                try {
+                    await auth.sendPasswordResetEmail(email);
+                    showAlert("Reset link transmitted! Check your mailbox.", true);
+                } catch(err) {
+                    showAlert(err.message);
+                }
+            }
+        }
+
+        function handleLogout() {
+            auth.signOut();
+        }
+
+        // Channels Syncing Logic
+        function listenToChannelsList() {
+            db.collection('rooms').orderBy('createdAt', 'asc').onSnapshot((snapshot) => {
+                const listContainer = document.getElementById('rooms-list');
+                listContainer.innerHTML = '';
+                
+                if(snapshot.empty) {
+                    listContainer.innerHTML = `<div class="text-xs text-gray-500 p-2 text-center">No arenas built yet.</div>`;
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const isSelected = doc.id === activeRoomId;
+                    const item = document.createElement('div');
+                    item.className = `flex items-center justify-between px-2 py-1.5 rounded text-sm cursor-pointer transition group ${isSelected ? 'bg-[#404249] text-white' : 'text-gray-400 hover:bg-[#35373c] hover:text-gray-200'}`;
+                    item.setAttribute('onclick', `switchActiveChannel('${doc.id}', '${data.name}')`);
+                    item.innerHTML = `
+                        <div class="flex items-center gap-1.5 truncate">
+                            <i class="fa-solid fa-hashtag text-gray-500"></i>
+                            <span class="truncate font-medium">${data.name}</span>
+                        </div>
+                    `;
+                    listContainer.appendChild(item);
+                });
+
+                if(!activeRoomId && snapshot.docs.length > 0) {
+                    const firstDoc = snapshot.docs[0];
+                    switchActiveChannel(firstDoc.id, firstDoc.data().name);
+                }
+            }, err => console.error("Room sync failure: ", err));
+        }
+
+        function openCreateRoomModal() {
+            document.getElementById('create-room-modal').classList.remove('hidden');
+        }
+        function closeCreateRoomModal() {
+            document.getElementById('create-room-modal').classList.add('hidden');
+            document.getElementById('new-room-name').value = '';
+        }
+
+        async function handleCreateRoomSubmit() {
+            const nameInput = document.getElementById('new-room-name').value.trim().toLowerCase().replace(/\s+/g, '-');
+            if(!nameInput) return;
+
+            try {
+                const newDocRef = await db.collection('rooms').add({
+                    name: nameInput,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: auth.currentUser.uid
+                });
+                closeCreateRoomModal();
+                switchActiveChannel(newDocRef.id, nameInput);
+            } catch(err) {
+                console.error("Room addition matrix execution error: ", err);
+            }
+        }
+
+        // Messaging Control Logic
+        function switchActiveChannel(roomId, roomName) {
+            activeRoomId = roomId;
+            document.getElementById('active-room-title').innerText = roomName;
+            
+            const msgInput = document.getElementById('message-input');
+            msgInput.disabled = false;
+            msgInput.placeholder = `Message #${roomName}`;
+
+            if (unsubscribeMessages) unsubscribeMessages();
+            listenToMessagesFeed(roomId);
+        }
+
+        function listenToMessagesFeed(roomId) {
+            const feed = document.getElementById('messages-feed');
+            feed.innerHTML = `<div class="h-full flex items-center justify-center text-gray-500 text-sm"><i class="fa-solid fa-circle-notch animate-spin mr-2"></i> Syncing channel stream...</div>`;
+
+            unsubscribeMessages = db.collection('rooms').doc(roomId).collection('messages')
+                .orderBy('timestamp', 'asc')
+                .onSnapshot((snapshot) => {
+                    feed.innerHTML = '';
+                    if (snapshot.empty) {
+                        feed.innerHTML = `
+                            <div class="h-full flex flex-col items-center justify-center text-gray-500 text-sm gap-2">
+                                <i class="fa-solid fa-paper-plane text-3xl text-gray-600"></i>
+                                <p>Welcome to the beginning of the #${document.getElementById('active-room-title').innerText} channel!</p>
+                            </div>`;
+                        return;
+                    }
+
+                    snapshot.forEach((doc) => {
+                        const msg = doc.data();
+                        const card = document.createElement('div');
+                        card.className = "flex items-start gap-4 hover:bg-[#2e3035]/30 p-1 px-2 rounded group transition duration-150 fade-in";
+                        
+                        let timeString = "Just Now";
+                        if(msg.timestamp) {
+                            const date = msg.timestamp.toDate();
+                            timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        }
+
+                        card.innerHTML = `
+                            <img src="${msg.userAvatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=fallback'}" class="w-10 h-10 rounded-full bg-[#1e1f22] mt-0.5" alt="User Avatar">
+                            <div class="flex flex-col">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="font-semibold text-white text-sm hover:underline cursor-pointer">${msg.userName}</span>
+                                    <span class="text-[10px] text-gray-400 font-medium">${timeString}</span>
+                                </div>
+                                <p class="text-sm text-gray-300 mt-0.5 break-all select-text">${escapeHTML(msg.content)}</p>
+                            </div>
+                        `;
+                        feed.appendChild(card);
+                    });
+                    feed.scrollTop = feed.scrollHeight;
+                }, err => {
+                    console.error("Message stream failure: ", err);
+                });
+        }
+
+        async function handleSendMessage(e) {
+            e.preventDefault();
+            const inputField = document.getElementById('message-input');
+            const content = inputField.value.trim();
+            
+            if(!content || !activeRoomId) return;
+            inputField.value = '';
+
+            try {
+                await db.collection('rooms').doc(activeRoomId).collection('messages').add({
+                    content: content,
+                    userId: auth.currentUser.uid,
+                    userName: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+                    userAvatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${auth.currentUser.uid}`,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch(err) {
+                console.error("Message send failure: ", err);
+            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
     </script>
-
 </body>
 </html>
