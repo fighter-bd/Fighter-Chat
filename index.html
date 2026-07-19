@@ -28,6 +28,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="https://api.dicebear.com/7.x/bottts/svg?seed=fighter">
     <meta name="google-site-verification" content="erWE5KhzCGzL-dl4Mo9CVFrRUhlbxCDjP9BeKibsN8w" />
+    <!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Mobile App Settings -->
+<meta name="theme-color" content="#16a34a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Fighter Whatsapp">
+
+<!-- App Icon -->
+<link rel="apple-touch-icon" href="icon-192.png">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -495,6 +506,18 @@
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t));
         }
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => {
+        console.log("Fighter Whatsapp App Ready");
+      })
+      .catch((error) => {
+        console.log("Service Worker Error:", error);
+      });
+  });
+}
+
     </script>
 </body>
 </html>
