@@ -174,8 +174,24 @@
                     </div>
                     <div class="min-w-0">
                         <h3 id="active-room-title" class="font-semibold text-white text-sm leading-tight truncate">Select a Chat</h3>
+                        <div id="onlineStatus"
+style="
+font-size:12px;
+color:#25D366;
+margin-top:2px;">
+🟢 Online
+</div>
                         <span class="text-[11px] text-gray-400 block truncate">Tap to open communication channel</span>
                     </div>
+                    <div id="typing-status"
+style="
+display:none;
+font-size:12px;
+color:#25D366;
+margin-top:2px;
+font-style:italic;">
+Typing...
+</div>
                 </div>
                 <div class="text-gray-400 text-base flex items-center gap-4 flex-shrink-0 ml-2">
                     <i class="fa-solid fa-search cursor-pointer hover:text-white hidden sm:block"></i>
@@ -195,10 +211,37 @@
             <!-- Bottom Message Input Field Footer Container -->
             <div class="p-2 bg-wa-header flex items-center gap-2 z-10 flex-shrink-0">
                 <button type="button" class="text-gray-400 hover:text-white text-lg px-1"><i class="fa-regular fa-face-smile"></i></button>
-                
+                <button type="button" id="emojiBtn"
+class="text-yellow-400 text-xl px-2">
+😊
+</button>
                 <form id="message-form" onsubmit="handleSendMessage(event)" class="flex-1 flex items-center gap-2 min-w-0">
                     <input type="text" id="message-input" required disabled class="w-full bg-wa-input text-white placeholder-gray-500 rounded-lg px-3 sm:px-4 py-2 text-sm focus:outline-none min-w-0" placeholder="Type a message">
-                    <button type="submit" class="bg-wa-accent text-wa-panel hover:bg-[#008f70] rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 transition shadow-md"><i class="fa-solid fa-paper-plane text-sm"></i></button>
+                    
+                    <div id="emojiBox"
+style="
+display:none;
+position:absolute;
+bottom:70px;
+left:15px;
+background:#202c33;
+padding:10px;
+border-radius:12px;
+box-shadow:0 0 15px rgba(0,0,0,.4);
+z-index:9999;">
+
+<span class="emoji">😀</span>
+<span class="emoji">😂</span>
+<span class="emoji">😍</span>
+<span class="emoji">😎</span>
+<span class="emoji">🥰</span>
+<span class="emoji">😢</span>
+<span class="emoji">🔥</span>
+<span class="emoji">❤️</span>
+<span class="emoji">👍</span>
+<span class="emoji">👏</span>
+
+</div><button type="submit" class="bg-wa-accent text-wa-panel hover:bg-[#008f70] rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 transition shadow-md"><i class="fa-solid fa-paper-plane text-sm"></i></button>
                 </form>
             </div>
         </div>
@@ -225,6 +268,40 @@
             </div>
         </div>
     </div>
+    <div id="installPopup" style="
+display:none;
+position:fixed;
+bottom:20px;
+left:20px;
+right:20px;
+background:#202c33;
+color:white;
+padding:18px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,.4);
+z-index:9999;
+text-align:center;">
+
+<h3 style="margin:0;color:#25D366;">
+📱 Install Fighter WhatsApp
+</h3>
+
+<p style="font-size:14px;margin:10px 0;">
+Install this app for a faster and better experience.
+</p>
+
+<button id="installBtn"
+style="
+background:#25D366;
+border:none;
+padding:10px 25px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;">
+Install
+</button>
+
+</div>
 
 
     <!-- =========================================================================
@@ -254,6 +331,12 @@
         let activeRoomId = null;
         let unsubscribeMessages = null;
         let initialLoadDone = false; // To prevent auto-opening first chat on mobile layout instantly
+        // Request Notification Permission
+if ("Notification" in window) {
+    Notification.requestPermission().then(permission => {
+        console.log("Notification:", permission);
+    });
+}
 
         // Auth state listener
         auth.onAuthStateChanged((user) => {
@@ -478,7 +561,12 @@
                                 <p class="text-sm pb-2 break-all pr-8 select-text">${escapeHTML(msg.content)}</p>
                                 <span class="absolute bottom-1 right-2 text-[9px] text-gray-400 font-medium select-none flex items-center gap-1">
                                     ${timeString}
-                                    ${isMe ? '<i class="fa-solid fa-check-double text-blue-400"></i>' : ''}
+                                    ${isMe
+    ? (msg.seen
+        ? '<i class="fa-solid fa-check-double text-blue-400"></i>'
+        : '<i class="fa-solid fa-check text-gray-400"></i>')
+    : ''
+}
                                 </span>
                             </div>
                         `;
@@ -500,8 +588,20 @@
                     content,
                     userId: auth.currentUser.uid,
                     userName: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    seen: false
                 });
+                if (Notification.permission === "granted") {
+
+    new Notification("📩 New Message",{
+
+        body: content,
+
+        icon: "icon-192.png"
+
+    });
+
+}
             } catch(err) { console.error(err); }
         }
 
@@ -519,7 +619,98 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
+let deferredPrompt;
 
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    document.getElementById("installPopup").style.display = "block";
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+
+    document.getElementById("installPopup").style.display = "none";
+
+    if(deferredPrompt){
+
+        deferredPrompt.prompt();
+
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+    }
+
+});
+const emojiBtn = document.getElementById("emojiBtn");
+const emojiBox = document.getElementById("emojiBox");
+const messageInput = document.getElementById("message-input");
+
+emojiBtn.onclick = () => {
+
+    emojiBox.style.display =
+    emojiBox.style.display === "block"
+    ? "none"
+    : "block";
+
+};
+
+document.querySelectorAll(".emoji").forEach(item=>{
+
+    item.style.cursor="pointer";
+    item.style.fontSize="24px";
+    item.style.margin="5px";
+
+    item.onclick=()=>{
+
+        messageInput.value += item.innerText;
+
+        emojiBox.style.display="none";
+
+    };
+
+});
+const msgInput = document.getElementById("message-input");
+const typingStatus = document.getElementById("typing-status");
+
+let typingTimer;
+
+msgInput.addEventListener("input", () => {
+
+    typingStatus.style.display = "block";
+    typingStatus.innerHTML = "Typing...";
+
+    clearTimeout(typingTimer);
+
+    typingTimer = setTimeout(() => {
+        typingStatus.style.display = "none";
+    }, 1000);
+
+});
+const onlineStatus = document.getElementById("onlineStatus");
+
+function updateOnlineStatus() {
+
+    if (navigator.onLine) {
+
+        onlineStatus.innerHTML = "🟢 Online";
+        onlineStatus.style.color = "#25D366";
+
+    } else {
+
+        onlineStatus.innerHTML = "⚫ Offline";
+        onlineStatus.style.color = "#9ca3af";
+
+    }
+
+}
+
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);
+
+updateOnlineStatus();
     </script>
 </body>
 </html>
